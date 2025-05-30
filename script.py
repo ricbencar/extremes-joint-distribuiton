@@ -173,7 +173,7 @@ SECTOR_WIDTH_DEGREES = 30
 SEA_STATE_DURATION_HOURS = 3.0
 # Return periods for which to calculate contours. These are standard values used
 # in the design of marine structures.
-RETURN_PERIODS_YEARS = [1, 5, 10, 25, 50, 100, 250]
+RETURN_PERIODS_YEARS = [1, 10, 25, 50, 100, 250]
 # Minimum number of data points required in a dataset (or sector) to attempt
 # fitting a model. This prevents fitting on statistically insignificant samples.
 MIN_SAMPLES_FOR_FIT = 200

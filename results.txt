@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ================================================================================
 # Environmental Contour Analysis Report
 ================================================================================
@@ -408,3 +409,415 @@ Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 50              8.33            11.52                13.83
 100             8.69            11.67                14.00
 250             9.15            11.85                14.22
+=======
+================================================================================
+# Environmental Contour Analysis Report
+================================================================================
+
+================================================================================
+# Overall Results Summary Table
+================================================================================
+Analysis Case      | Return Period (yr) | Max Hs (m) | Tp @ Max Hs (s)
+-------------------+--------------------+------------+----------------
+Omnidirectional    | 1                  | 8.42       | 15.74          
+Omnidirectional    | 5                  | 9.73       | 16.48          
+Omnidirectional    | 10                 | 10.29      | 16.78          
+Omnidirectional    | 25                 | 11.03      | 17.16          
+Omnidirectional    | 50                 | 11.59      | 17.44          
+Omnidirectional    | 100                | 12.15      | 17.71          
+Omnidirectional    | 250                | 12.88      | 18.06          
+Sector 0-30 deg    | 1                  | 5.10       | 9.28           
+Sector 0-30 deg    | 5                  | 5.52       | 9.32           
+Sector 0-30 deg    | 10                 | 5.69       | 9.33           
+Sector 0-30 deg    | 25                 | 5.91       | 9.35           
+Sector 0-30 deg    | 50                 | 6.07       | 9.36           
+Sector 0-30 deg    | 100                | 6.22       | 9.38           
+Sector 0-30 deg    | 250                | 6.42       | 9.39           
+Sector 30-60 deg   | 1                  | 3.48       | 8.82           
+Sector 30-60 deg   | 5                  | 3.79       | 8.82           
+Sector 30-60 deg   | 10                 | 3.92       | 8.82           
+Sector 30-60 deg   | 25                 | 4.08       | 8.83           
+Sector 30-60 deg   | 50                 | 4.21       | 8.83           
+Sector 30-60 deg   | 100                | 4.33       | 8.83           
+Sector 30-60 deg   | 250                | 4.48       | 8.83           
+Sector 60-90 deg   | 1                  | 4.46       | 7.97           
+Sector 60-90 deg   | 5                  | 5.01       | 7.97           
+Sector 60-90 deg   | 10                 | 5.24       | 7.97           
+Sector 60-90 deg   | 25                 | 5.54       | 7.97           
+Sector 60-90 deg   | 50                 | 5.76       | 7.97           
+Sector 60-90 deg   | 100                | 5.98       | 7.97           
+Sector 60-90 deg   | 250                | 6.28       | 7.97           
+Sector 90-120 deg  | 1                  | 4.99       | 7.71           
+Sector 90-120 deg  | 5                  | 5.67       | 7.71           
+Sector 90-120 deg  | 10                 | 5.96       | 7.71           
+Sector 90-120 deg  | 25                 | 6.34       | 7.71           
+Sector 90-120 deg  | 50                 | 6.63       | 7.71           
+Sector 90-120 deg  | 100                | 6.92       | 7.71           
+Sector 90-120 deg  | 250                | 7.30       | 7.71           
+Sector 120-150 deg | 1                  | 4.81       | 7.59           
+Sector 120-150 deg | 5                  | 5.34       | 7.59           
+Sector 120-150 deg | 10                 | 5.57       | 7.59           
+Sector 120-150 deg | 25                 | 5.86       | 7.59           
+Sector 120-150 deg | 50                 | 6.08       | 7.59           
+Sector 120-150 deg | 100                | 6.29       | 7.59           
+Sector 120-150 deg | 250                | 6.57       | 7.59           
+Sector 150-180 deg | 1                  | 7.82       | 9.49           
+Sector 150-180 deg | 5                  | 8.83       | 9.72           
+Sector 150-180 deg | 10                 | 9.26       | 9.82           
+Sector 150-180 deg | 25                 | 9.82       | 9.94           
+Sector 150-180 deg | 50                 | 10.24      | 10.03          
+Sector 150-180 deg | 100                | 10.65      | 10.11          
+Sector 150-180 deg | 250                | 11.20      | 10.22          
+Sector 180-210 deg | 1                  | 8.10       | 10.84          
+Sector 180-210 deg | 5                  | 9.30       | 11.23          
+Sector 180-210 deg | 10                 | 9.82       | 11.38          
+Sector 180-210 deg | 25                 | 10.50      | 11.59          
+Sector 180-210 deg | 50                 | 11.02      | 11.74          
+Sector 180-210 deg | 100                | 11.53      | 11.88          
+Sector 180-210 deg | 250                | 12.21      | 12.07          
+Sector 210-240 deg | 1                  | 8.39       | 13.39          
+Sector 210-240 deg | 5                  | 9.50       | 13.93          
+Sector 210-240 deg | 10                 | 9.97       | 14.15          
+Sector 210-240 deg | 25                 | 10.58      | 14.42          
+Sector 210-240 deg | 50                 | 11.04      | 14.63          
+Sector 210-240 deg | 100                | 11.49      | 14.82          
+Sector 210-240 deg | 250                | 12.08      | 15.07          
+Sector 240-270 deg | 1                  | 9.02       | 15.97          
+Sector 240-270 deg | 5                  | 10.25      | 16.69          
+Sector 240-270 deg | 10                 | 10.77      | 16.98          
+Sector 240-270 deg | 25                 | 11.45      | 17.34          
+Sector 240-270 deg | 50                 | 11.95      | 17.61          
+Sector 240-270 deg | 100                | 12.45      | 17.87          
+Sector 240-270 deg | 250                | 13.11      | 18.20          
+Sector 270-300 deg | 1                  | 8.75       | 16.74          
+Sector 270-300 deg | 5                  | 9.96       | 17.43          
+Sector 270-300 deg | 10                 | 10.47      | 17.71          
+Sector 270-300 deg | 25                 | 11.13      | 18.07          
+Sector 270-300 deg | 50                 | 11.62      | 18.33          
+Sector 270-300 deg | 100                | 12.11      | 18.58          
+Sector 270-300 deg | 250                | 12.75      | 18.90          
+Sector 300-330 deg | 1                  | 8.47       | 16.45          
+Sector 300-330 deg | 5                  | 9.79       | 17.20          
+Sector 300-330 deg | 10                 | 10.36      | 17.51          
+Sector 300-330 deg | 25                 | 11.10      | 17.90          
+Sector 300-330 deg | 50                 | 11.66      | 18.19          
+Sector 300-330 deg | 100                | 12.22      | 18.47          
+Sector 300-330 deg | 250                | 12.96      | 18.83          
+Sector 330-360 deg | 1                  | 6.29       | 12.76          
+Sector 330-360 deg | 5                  | 7.14       | 13.22          
+Sector 330-360 deg | 10                 | 7.50       | 13.41          
+Sector 330-360 deg | 25                 | 7.98       | 13.65          
+Sector 330-360 deg | 50                 | 8.33       | 13.83          
+Sector 330-360 deg | 100                | 8.69       | 14.00          
+Sector 330-360 deg | 250                | 9.15       | 14.22
+
+--- SCRIPT CONFIGURATION ---
+Input File                  : input.csv
+Hs Column                   : swh
+Tp Column                   : pp1d
+MWD Column                  : mwd
+Tp-to-Tz Ratio              : 1.2
+Sea State (hours)           : 3.0
+Contour Method              : IFORM
+Return Periods (years)      : [1, 5, 10, 25, 50, 100, 250]
+Sector Analysis Enabled     : True
+Sector Width (degrees)      : 30
+Min. Samples per Fit        : 200
+------------------------------
+Total data points loaded (after NaN drop): 745128
+
+================================================================================
+# Detailed Analysis Logs (Per Case)
+================================================================================
+
+================================================================================
+# ANALYSIS FOR: Omnidirectional
+================================================================================
+Number of data points in this set: 745128
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.9828832341457578, beta=1.0584325813642121, delta=5.634277343750009), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=4.9536289723190166, b=8.813827581547379, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=2.9007751655542606e-18, b=0.260398923507948, c=0.13917655059963935))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               8.42            13.12                15.74
+5               9.73            13.73                16.48
+10              10.29           13.98                16.78
+25              11.03           14.30                17.16
+50              11.59           14.53                17.44
+100             12.15           14.76                17.71
+250             12.88           15.05                18.06
+
+================================================================================
+# ANALYSIS FOR: Sector 0-30 deg
+================================================================================
+Number of data points in this set: 12647
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.8548848615158242, beta=2.140190380562638, delta=2.1035002231598057), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=6.955440002599289, b=1.0786261676382514, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=4.680131263800602e-24, b=0.25730073258656183, c=0.2729066207759803))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               5.10            7.73                 9.28
+5               5.52            7.76                 9.32
+10              5.69            7.78                 9.33
+25              5.91            7.79                 9.35
+50              6.07            7.80                 9.36
+100             6.22            7.81                 9.38
+250             6.42            7.83                 9.39
+
+================================================================================
+# ANALYSIS FOR: Sector 30-60 deg
+================================================================================
+Number of data points in this set: 1049
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.8764619809728385, beta=1.691479717484095, delta=9.969183931163368), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=7.295358271569747, b=0.09271941707937491, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=2.416650744333091e-16, b=0.25452085934800217, c=-0.12764047764468495))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               3.48            7.35                 8.82
+5               3.79            7.35                 8.82
+10              3.92            7.35                 8.82
+25              4.08            7.36                 8.83
+50              4.21            7.36                 8.83
+100             4.33            7.36                 8.83
+250             4.48            7.36                 8.83
+
+================================================================================
+# ANALYSIS FOR: Sector 60-90 deg
+================================================================================
+Number of data points in this set: 429
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.6047554197586049, beta=1.1977768757340215, delta=19.76410185415505), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=6.638681511501517, b=1.2058601732194812e-14, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=0.2836811289262039, b=182.83075589951437, c=902.7901477611516))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               4.46            6.64                 7.97
+5               5.01            6.64                 7.97
+10              5.24            6.64                 7.97
+25              5.54            6.64                 7.97
+50              5.76            6.64                 7.97
+100             5.98            6.64                 7.97
+250             6.28            6.64                 7.97
+
+================================================================================
+# ANALYSIS FOR: Sector 90-120 deg
+================================================================================
+Number of data points in this set: 378
+# Fit attempt 1 (default) failed: Failed to fit dependence function DependenceFunction(func=_lnsquare2, a=6.638681511501517, b=1.2058601732194812e-14, c=1.0).Consider choosing different bounds.
+# Fit attempt 2 (perturbed_p0) failed: Failed to fit dependence function DependenceFunction(func=_lnsquare2, a=6.638681511501517, b=1.2058601732194812e-14, c=1.0).Consider choosing different bounds.
+# Fit attempt 3 (wide_bounds) failed: Failed to fit dependence function DependenceFunction(func=_lnsquare2, a=6.638681511501517, b=1.2058601732194812e-14, c=1.0).Consider choosing different bounds.
+
+# WARNING: Full complex model fitting failed for 'Sector 90-120 deg' after 3 attempts. Last error: Failed to fit dependence function DependenceFunction(func=_lnsquare2, a=6.638681511501517, b=1.2058601732194812e-14, c=1.0).Consider choosing different bounds.. Falling back to a simplified model (no Hs-Tz dependency).
+# Simplified model fitting successful.
+
+--- Fitted Model Parameters (Simplified Fallback Model) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.4743057374132684, beta=1.0345576717068061, delta=30.67485241638903), LogNormalDistribution(mu=1.860824938498504, sigma=0.39921332500676604)], conditional_on=[None, None])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               4.99            6.43                 7.71
+5               5.67            6.43                 7.71
+10              5.96            6.43                 7.71
+25              6.34            6.43                 7.71
+50              6.63            6.43                 7.71
+100             6.92            6.43                 7.71
+250             7.30            6.43                 7.71
+
+================================================================================
+# ANALYSIS FOR: Sector 120-150 deg
+================================================================================
+Number of data points in this set: 631
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.8607743612397463, beta=1.3619048597098897, delta=11.31319699424672), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=6.328657378341175, b=2.5340432259932593e-11, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=0.026375829981428175, b=0.4531548268293193, c=0.32855007083388454))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               4.81            6.33                 7.59
+5               5.34            6.33                 7.59
+10              5.57            6.33                 7.59
+25              5.86            6.33                 7.59
+50              6.08            6.33                 7.59
+100             6.29            6.33                 7.59
+250             6.57            6.33                 7.59
+
+================================================================================
+# ANALYSIS FOR: Sector 150-180 deg
+================================================================================
+Number of data points in this set: 2053
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.214090458138071, beta=1.232409895469871, delta=7.040918402767012), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=4.787048031997922, b=3.4936454823848573, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=6.011336063129244e-13, b=6.675063621237337, c=12.086140416166884))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               7.82            7.91                 9.49
+5               8.83            8.10                 9.72
+10              9.26            8.18                 9.82
+25              9.82            8.28                 9.94
+50              10.24           8.36                 10.03
+100             10.65           8.43                 10.11
+250             11.20           8.52                 10.22
+
+================================================================================
+# ANALYSIS FOR: Sector 180-210 deg
+================================================================================
+Number of data points in this set: 7072
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.7547076026191408, beta=1.003692833666927, delta=17.266580341863715), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=4.521292092317373, b=4.964390910244812, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=6.378803293702673e-21, b=0.6561962286769164, c=0.702009524246948))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               8.10            9.03                 10.84
+5               9.30            9.36                 11.23
+10              9.82            9.49                 11.38
+25              10.50           9.66                 11.59
+50              11.02           9.78                 11.74
+100             11.53           9.90                 11.88
+250             12.21           10.06                12.07
+
+================================================================================
+# ANALYSIS FOR: Sector 210-240 deg
+================================================================================
+Number of data points in this set: 19835
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.37181998142655, beta=1.247853261996126, delta=4.976893656277551), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=4.136272488575743, b=7.589793049909688, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=1.7869581193585075e-16, b=0.30128226765617416, c=0.13887748802119865))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               8.39            11.16                13.39
+5               9.50            11.61                13.93
+10              9.97            11.79                14.15
+25              10.58           12.02                14.42
+50              11.04           12.19                14.63
+100             11.49           12.35                14.82
+250             12.08           12.56                15.07
+
+================================================================================
+# ANALYSIS FOR: Sector 240-270 deg
+================================================================================
+Number of data points in this set: 54237
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.5317524264808227, beta=1.2538674105172634, delta=3.5152956633243635), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=4.267659508186096, b=9.427586840718561, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=3.691474534510927e-18, b=0.23528376617818636, c=0.12605029349497))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               9.02            13.31                15.97
+5               10.25           13.91                16.69
+10              10.77           14.15                16.98
+25              11.45           14.45                17.34
+50              11.95           14.67                17.61
+100             12.45           14.89                17.87
+250             13.11           15.17                18.20
+
+================================================================================
+# ANALYSIS FOR: Sector 270-300 deg
+================================================================================
+Number of data points in this set: 179268
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.5416499652601305, beta=1.2678393150335565, delta=2.8804655358436446), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=5.2522390342912635, b=9.20653203148109, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=0.0427021642991478, b=0.1454527622532266, c=0.1734529753151239))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               8.75            13.95                16.74
+5               9.96            14.53                17.43
+10              10.47           14.76                17.71
+25              11.13           15.06                18.07
+50              11.62           15.27                18.33
+100             12.11           15.48                18.58
+250             12.75           15.75                18.90
+
+================================================================================
+# ANALYSIS FOR: Sector 300-330 deg
+================================================================================
+Number of data points in this set: 278564
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.0491784044809689, beta=1.0780592290843498, delta=4.5915155102726395), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=5.338112626347951, b=9.005614294724774, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=0.0023648149381172135, b=0.21202147310344002, c=0.1756134840362329))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               8.47            13.71                16.45
+5               9.79            14.34                17.20
+10              10.36           14.59                17.51
+25              11.10           14.92                17.90
+50              11.66           15.16                18.19
+100             12.22           15.39                18.47
+250             12.96           15.69                18.83
+
+================================================================================
+# ANALYSIS FOR: Sector 330-360 deg
+================================================================================
+Number of data points in this set: 188965
+# Fit successful with strategy: default
+
+--- Fitted Model Parameters (Full Complex Model (OMAE 2020)) ---
+GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.8499338100481052, beta=1.157694896740237, delta=8.692043766272972), ConditionalLogNormalDistribution(mu=DependenceFunction(func=_lnsquare2, a=4.739036612947894, b=7.362016108606761, c=1.0), sigma=DependenceFunction(func=_asymdecrease3, a=9.55119371485813e-18, b=0.30354364578521265, c=0.15467607141845152))], conditional_on=[None, 0])
+
+-----------------------------
+
+--- Environmental Contour Results ---
+Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
+-------------------------------------------------------------------------
+1               6.29            10.63                12.76
+5               7.14            11.02                13.22
+10              7.50            11.18                13.41
+25              7.98            11.38                13.65
+50              8.33            11.52                13.83
+100             8.69            11.67                14.00
+250             9.15            11.85                14.22
+>>>>>>> c1d38f127180f1431cf118b1295c9a9be39a6c4b

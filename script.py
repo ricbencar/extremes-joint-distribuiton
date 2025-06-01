@@ -443,7 +443,7 @@ def perform_analysis_for_dataset(data, base_model_dist_descriptions, semantics, 
         # Plot the raw data points as a scatter background for context.
         ax_contour.scatter(
             data[x_scatter_col], data[y_scatter_col],
-            alpha=0.1, s=5, color='gray', label='All Data Points'
+            alpha=0.1, s=5, color='black', label='All Data Points'
         )
 
         table_data_for_plot = [] 

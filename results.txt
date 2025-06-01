@@ -8,78 +8,91 @@
 Analysis Case      | Return Period (yr) | Max Hs (m) | Tp @ Max Hs (s)
 -------------------+--------------------+------------+----------------
 Omnidirectional    | 1                  | 8.42       | 15.74          
+Omnidirectional    | 5                  | 9.73       | 16.48          
 Omnidirectional    | 10                 | 10.29      | 16.78          
 Omnidirectional    | 25                 | 11.03      | 17.16          
 Omnidirectional    | 50                 | 11.59      | 17.44          
 Omnidirectional    | 100                | 12.15      | 17.71          
 Omnidirectional    | 250                | 12.88      | 18.06          
 Sector 0-30 deg    | 1                  | 5.10       | 9.28           
+Sector 0-30 deg    | 5                  | 5.52       | 9.32           
 Sector 0-30 deg    | 10                 | 5.69       | 9.33           
 Sector 0-30 deg    | 25                 | 5.91       | 9.35           
 Sector 0-30 deg    | 50                 | 6.07       | 9.36           
 Sector 0-30 deg    | 100                | 6.22       | 9.38           
 Sector 0-30 deg    | 250                | 6.42       | 9.39           
 Sector 30-60 deg   | 1                  | 3.48       | 8.82           
+Sector 30-60 deg   | 5                  | 3.79       | 8.82           
 Sector 30-60 deg   | 10                 | 3.92       | 8.82           
 Sector 30-60 deg   | 25                 | 4.08       | 8.83           
 Sector 30-60 deg   | 50                 | 4.21       | 8.83           
 Sector 30-60 deg   | 100                | 4.33       | 8.83           
 Sector 30-60 deg   | 250                | 4.48       | 8.83           
 Sector 60-90 deg   | 1                  | 4.46       | 7.97           
+Sector 60-90 deg   | 5                  | 5.01       | 7.97           
 Sector 60-90 deg   | 10                 | 5.24       | 7.97           
 Sector 60-90 deg   | 25                 | 5.54       | 7.97           
 Sector 60-90 deg   | 50                 | 5.76       | 7.97           
 Sector 60-90 deg   | 100                | 5.98       | 7.97           
 Sector 60-90 deg   | 250                | 6.28       | 7.97           
 Sector 90-120 deg  | 1                  | 4.99       | 7.71           
+Sector 90-120 deg  | 5                  | 5.67       | 7.71           
 Sector 90-120 deg  | 10                 | 5.96       | 7.71           
 Sector 90-120 deg  | 25                 | 6.34       | 7.71           
 Sector 90-120 deg  | 50                 | 6.63       | 7.71           
 Sector 90-120 deg  | 100                | 6.92       | 7.71           
 Sector 90-120 deg  | 250                | 7.30       | 7.71           
 Sector 120-150 deg | 1                  | 4.81       | 7.59           
+Sector 120-150 deg | 5                  | 5.34       | 7.59           
 Sector 120-150 deg | 10                 | 5.57       | 7.59           
 Sector 120-150 deg | 25                 | 5.86       | 7.59           
 Sector 120-150 deg | 50                 | 6.08       | 7.59           
 Sector 120-150 deg | 100                | 6.29       | 7.59           
 Sector 120-150 deg | 250                | 6.57       | 7.59           
 Sector 150-180 deg | 1                  | 7.82       | 9.49           
+Sector 150-180 deg | 5                  | 8.83       | 9.72           
 Sector 150-180 deg | 10                 | 9.26       | 9.82           
 Sector 150-180 deg | 25                 | 9.82       | 9.94           
 Sector 150-180 deg | 50                 | 10.24      | 10.03          
 Sector 150-180 deg | 100                | 10.65      | 10.11          
 Sector 150-180 deg | 250                | 11.20      | 10.22          
 Sector 180-210 deg | 1                  | 8.10       | 10.84          
+Sector 180-210 deg | 5                  | 9.30       | 11.23          
 Sector 180-210 deg | 10                 | 9.82       | 11.38          
 Sector 180-210 deg | 25                 | 10.50      | 11.59          
 Sector 180-210 deg | 50                 | 11.02      | 11.74          
 Sector 180-210 deg | 100                | 11.53      | 11.88          
 Sector 180-210 deg | 250                | 12.21      | 12.07          
 Sector 210-240 deg | 1                  | 8.39       | 13.39          
+Sector 210-240 deg | 5                  | 9.50       | 13.93          
 Sector 210-240 deg | 10                 | 9.97       | 14.15          
 Sector 210-240 deg | 25                 | 10.58      | 14.42          
 Sector 210-240 deg | 50                 | 11.04      | 14.63          
 Sector 210-240 deg | 100                | 11.49      | 14.82          
 Sector 210-240 deg | 250                | 12.08      | 15.07          
 Sector 240-270 deg | 1                  | 9.02       | 15.97          
+Sector 240-270 deg | 5                  | 10.25      | 16.69          
 Sector 240-270 deg | 10                 | 10.77      | 16.98          
 Sector 240-270 deg | 25                 | 11.45      | 17.34          
 Sector 240-270 deg | 50                 | 11.95      | 17.61          
 Sector 240-270 deg | 100                | 12.45      | 17.87          
 Sector 240-270 deg | 250                | 13.11      | 18.20          
 Sector 270-300 deg | 1                  | 8.75       | 16.74          
+Sector 270-300 deg | 5                  | 9.96       | 17.43          
 Sector 270-300 deg | 10                 | 10.47      | 17.71          
 Sector 270-300 deg | 25                 | 11.13      | 18.07          
 Sector 270-300 deg | 50                 | 11.62      | 18.33          
 Sector 270-300 deg | 100                | 12.11      | 18.58          
 Sector 270-300 deg | 250                | 12.75      | 18.90          
 Sector 300-330 deg | 1                  | 8.47       | 16.45          
+Sector 300-330 deg | 5                  | 9.79       | 17.20          
 Sector 300-330 deg | 10                 | 10.36      | 17.51          
 Sector 300-330 deg | 25                 | 11.10      | 17.90          
 Sector 300-330 deg | 50                 | 11.66      | 18.19          
 Sector 300-330 deg | 100                | 12.22      | 18.47          
 Sector 300-330 deg | 250                | 12.96      | 18.83          
 Sector 330-360 deg | 1                  | 6.29       | 12.76          
+Sector 330-360 deg | 5                  | 7.14       | 13.22          
 Sector 330-360 deg | 10                 | 7.50       | 13.41          
 Sector 330-360 deg | 25                 | 7.98       | 13.65          
 Sector 330-360 deg | 50                 | 8.33       | 13.83          
@@ -94,7 +107,7 @@ MWD Column                  : mwd
 Tp-to-Tz Ratio              : 1.2
 Sea State (hours)           : 3.0
 Contour Method              : IFORM
-Return Periods (years)      : [1, 10, 25, 50, 100, 250]
+Return Periods (years)      : [1, 5, 10, 25, 50, 100, 250]
 Sector Analysis Enabled     : True
 Sector Width (degrees)      : 30
 Min. Samples per Fit        : 200
@@ -120,6 +133,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               8.42            13.12                15.74
+5               9.73            13.73                16.48
 10              10.29           13.98                16.78
 25              11.03           14.30                17.16
 50              11.59           14.53                17.44
@@ -141,6 +155,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               5.10            7.73                 9.28
+5               5.52            7.76                 9.32
 10              5.69            7.78                 9.33
 25              5.91            7.79                 9.35
 50              6.07            7.80                 9.36
@@ -162,6 +177,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               3.48            7.35                 8.82
+5               3.79            7.35                 8.82
 10              3.92            7.35                 8.82
 25              4.08            7.36                 8.83
 50              4.21            7.36                 8.83
@@ -183,6 +199,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               4.46            6.64                 7.97
+5               5.01            6.64                 7.97
 10              5.24            6.64                 7.97
 25              5.54            6.64                 7.97
 50              5.76            6.64                 7.97
@@ -209,6 +226,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               4.99            6.43                 7.71
+5               5.67            6.43                 7.71
 10              5.96            6.43                 7.71
 25              6.34            6.43                 7.71
 50              6.63            6.43                 7.71
@@ -230,6 +248,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               4.81            6.33                 7.59
+5               5.34            6.33                 7.59
 10              5.57            6.33                 7.59
 25              5.86            6.33                 7.59
 50              6.08            6.33                 7.59
@@ -251,6 +270,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               7.82            7.91                 9.49
+5               8.83            8.10                 9.72
 10              9.26            8.18                 9.82
 25              9.82            8.28                 9.94
 50              10.24           8.36                 10.03
@@ -272,6 +292,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               8.10            9.03                 10.84
+5               9.30            9.36                 11.23
 10              9.82            9.49                 11.38
 25              10.50           9.66                 11.59
 50              11.02           9.78                 11.74
@@ -293,6 +314,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               8.39            11.16                13.39
+5               9.50            11.61                13.93
 10              9.97            11.79                14.15
 25              10.58           12.02                14.42
 50              11.04           12.19                14.63
@@ -314,6 +336,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               9.02            13.31                15.97
+5               10.25           13.91                16.69
 10              10.77           14.15                16.98
 25              11.45           14.45                17.34
 50              11.95           14.67                17.61
@@ -335,6 +358,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               8.75            13.95                16.74
+5               9.96            14.53                17.43
 10              10.47           14.76                17.71
 25              11.13           15.06                18.07
 50              11.62           15.27                18.33
@@ -356,6 +380,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=1.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               8.47            13.71                16.45
+5               9.79            14.34                17.20
 10              10.36           14.59                17.51
 25              11.10           14.92                17.90
 50              11.66           15.16                18.19
@@ -377,6 +402,7 @@ GlobalHierarchicalModel(distributions=[ExponentiatedWeibullDistribution(alpha=0.
 Return Period   Max Hs (m)      Tz @ Max Hs (s)      Tp @ Max Hs (s)
 -------------------------------------------------------------------------
 1               6.29            10.63                12.76
+5               7.14            11.02                13.22
 10              7.50            11.18                13.41
 25              7.98            11.38                13.65
 50              8.33            11.52                13.83

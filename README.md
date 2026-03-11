@@ -1,115 +1,1197 @@
-Extremes Joint Distribution Contour Analysis
-================================================================================
+# Virocon Environmental Contour Analysis
 
-PURPOSE:
---------
-This script performs an environmental contour analysis on oceanographic time 
-series data, specifically focusing on significant wave height (Hs) and peak 
-period (Tp). It utilizes the 'virocon' Python library to model the joint 
-probability distribution of these variables and subsequently calculates 
-environmental contours for specified return periods.
+A Python workflow for fitting a joint metocean model to **significant wave height** and **wave period** data, and then computing **environmental contours** for multiple return periods using **virocon**. The script supports both **omnidirectional** and **directional-sector** analyses, writes a **multi-page PDF** with contour plots, exports **high-resolution PNG figures**, and produces a detailed **results report** with fitted-model information and contour summaries.
 
-Environmental contours are lines of constant exceedance probability for a given
-sea state duration and return period. They are crucial for engineering design, 
-providing a set of extreme environmental conditions (combinations of Hs and Tp) 
-that a marine structure is expected to withstand over its design life.
+---
 
-![figure](https://github.com/user-attachments/assets/b2c6ba0b-c849-4cc5-925a-eaf5e5622d2d)
-KEY FEATURES:
--------------
-- **Data Input**: Loads time series data from a CSV file containing datetime, 
-  significant wave height (Hs), peak period (Tp), and mean wave direction (MWD).
-- **Data Handling**: Includes a feature to generate a sample 'input.csv' if not 
-  found, allowing for immediate demonstration. It also handles missing values.
-- **Joint Distribution Modeling**: Employs the robust OMAE 2020 global 
-  hierarchical model, which is predefined in the Virocon library, to describe 
-  the joint statistics of Hs and zero-upcrossing period (Tz). 
-  The script automatically converts the input peak period (Tp) to Tz.
-- **Robust Fitting**: Implements multiple fitting strategies to ensure the model's 
-  parameters can be estimated even with challenging datasets. This includes 
-  perturbing initial guesses and widening parameter bounds.
-- **Fallback Mechanism**: If the complex OMAE 2020 model fails to fit, the 
-  script automatically falls back to a simpler model that treats Hs and Tz as
-  statistically independent variables, ensuring the analysis can proceed.
-- **Sectoral Analysis**: Optionally performs the analysis not just for the entire 
-  (omnidirectional) dataset, but also for specific directional sectors based on 
-  mean wave direction (MWD), which is critical for direction-sensitive designs.
-- **Comprehensive Output**: Generates a multi-page PDF report with contour plots, 
-  high-resolution PNG images for each analysis case, and a detailed text file 
-  ('results.txt') containing configuration details, fitted model parameters, and 
-  contour results.
+## Table of Contents
 
-METHODOLOGY OVERVIEW:
------------------------
-1.  **Joint Probability Model**: The script uses a Global Hierarchical Model (GHM)
-    where the joint probability density function f(Hs, Tz) is factored into a 
-    marginal distribution for Hs and a conditional distribution for Tz given Hs: 
-    f(hs, tz) = f_Hs(hs) * f_Tz|Hs(tz|hs).
-2.  **OMAE 2020 Model**: The specific model used is 'get_OMAE2020_Hs_Tz' from 
-    Virocon. This model is well-documented and has been tested 
-    for wind and wave applications. It typically uses an 
-    Exponentiated Weibull distribution for the marginal significant wave height (Hs) 
-    and a Lognormal distribution for the zero-upcrossing period (Tz) conditional 
-    on Hs. The parameters of the conditional distribution are 
-    defined as functions of Hs, known as dependence functions.
-3.  **Contour Calculation**: Environmental contours are computed for a given return
-    period (T_R) and sea state duration (t_s). These are used to calculate the 
-    exceedance probability, alpha (α), per sea state.
-    α = t_s / (T_R * N_year), where N_year is the number of sea states in a year.
-    The script uses Virocon's `calculate_alpha` function for this purpose.
-4.  **Contour Method**: The script defaults to the Inverse First-Order Reliability 
-    Method (IFORM) to compute the contour coordinates. IFORM is a 
-    standard, widely-used method that transforms the variables into a standard
-    normal space to find the contour. Other methods like ISORM are
-    also available for selection.
+- [1. Purpose and scope](#1-purpose-and-scope)
+- [2. Why environmental contours matter](#2-why-environmental-contours-matter)
+- [3. Theoretical framework](#3-theoretical-framework)
+  - [3.1 Long-term extremes and return periods](#31-long-term-extremes-and-return-periods)
+  - [3.2 Environmental states and exceedance probability](#32-environmental-states-and-exceedance-probability)
+  - [3.3 Joint probabilistic modelling of sea states](#33-joint-probabilistic-modelling-of-sea-states)
+  - [3.4 Global hierarchical models](#34-global-hierarchical-models)
+  - [3.5 The Hs-Tz model used in this script](#35-the-hs-tz-model-used-in-this-script)
+  - [3.6 Why the script converts Tp to Tz](#36-why-the-script-converts-tp-to-tz)
+  - [3.7 Contour families and exceedance definitions](#37-contour-families-and-exceedance-definitions)
+  - [3.8 IFORM, ISORM, highest density and direct sampling](#38-iform-isorm-highest-density-and-direct-sampling)
+  - [3.9 Model fitting, parameter estimation and dependence functions](#39-model-fitting-parameter-estimation-and-dependence-functions)
+  - [3.10 Why directional sector analysis is useful](#310-why-directional-sector-analysis-is-useful)
+- [4. What this script does](#4-what-this-script-does)
+- [5. Workflow implemented by the script](#5-workflow-implemented-by-the-script)
+- [6. Input data requirements](#6-input-data-requirements)
+- [7. Installation](#7-installation)
+- [8. Detailed configuration guide](#8-detailed-configuration-guide)
+- [9. Step-by-step usage](#9-step-by-step-usage)
+- [10. Directional sector logic](#10-directional-sector-logic)
+- [11. Outputs generated by the script](#11-outputs-generated-by-the-script)
+- [12. Robustness strategy and fallback modelling](#12-robustness-strategy-and-fallback-modelling)
+- [13. Interpretation of results](#13-interpretation-of-results)
+- [14. Engineering assumptions, limitations and cautions](#14-engineering-assumptions-limitations-and-cautions)
+- [15. Extending or adapting the script](#15-extending-or-adapting-the-script)
+- [16. Troubleshooting](#16-troubleshooting)
+- [17. Upstream virocon context](#17-upstream-virocon-context)
+- [18. Detailed bibliography](#18-very-detailed-bibliography)
 
-REQUIREMENTS & INSTALLATION:
-------------------------------
-The script requires Python 3 and the following packages. They can be installed
-using pip:
+---
 
-```pip install pandas numpy matplotlib virocon```
+## 1. Purpose and scope
 
-HOW TO USE:
------------
-1.  **Prepare Input Data**: 
-    - Create a CSV file named 'input.csv' in the same directory as the script.
-    - The CSV file must contain the following columns:
-      - `datetime`: Timestamp for each measurement (e.g., '2023-01-01 00:00:00').
-      - `swh`: Significant wave height (Hs) in meters.
-      - `pp1d`: Peak wave period (Tp) in seconds.
-      - `mwd`: Mean wave direction in degrees (0-360), required only if 
-               `PERFORM_SECTOR_ANALYSIS` is True.
-    - If 'input.csv' is not found, the script will automatically generate a dummy
-      file with synthetic data to demonstrate its functionality.
+This repository contains a script that performs **environmental contour analysis** for oceanographic time series, with emphasis on the joint behaviour of:
 
-2.  **Configure Parameters**:
-    - Open this script and navigate to the 'USER CONFIGURATION' section below.
-    - Adjust the parameters as needed for your specific analysis. Key parameters
-      include file paths, column names, return periods, and whether to perform
-      sectoral analysis. Detailed comments in that section explain each variable.
-    - The default `SEA_STATE_DURATION_HOURS` is 3.0, a common and recommended 
-      assumption for offshore engineering applications.
+- **Significant wave height** `Hs`
+- **Peak wave period** `Tp`
+- optionally **mean wave direction** `MWD`
 
-3.  **Run the Script**:
-    - Open a terminal or command prompt.
-    - Navigate to the directory containing this script.
-    - Execute the script using: `python script.py`
+Internally, the script converts `Tp` to **zero-upcrossing period** `Tz` and then fits a **global hierarchical model** using the predefined `get_OMAE2020_Hs_Tz()` model from `virocon`. After the model is fitted, it computes contours for one or more **return periods**, plots them, and reports the key design points such as:
 
-4.  **Review Outputs**:
-    - `contours.pdf`: A multi-page PDF containing plots of the environmental 
-      contours for the omnidirectional case and each directional sector.
-    - `plots/` directory: Contains high-resolution PNG images of each contour plot.
-    - `results.txt`: A detailed report with the configuration used, fitted model
-      parameters for each case, and a summary table of the key contour results.
+- maximum `Hs` along each contour
+- `Tz` associated with that maximum `Hs`
+- `Tp` associated with that maximum `Hs`
 
-REFERENCES & DOCUMENTATION:
----------------------------
-- **Virocon GitHub Repository**: https://github.com/virocon-organization/virocon
-- **Virocon Documentation**: https://virocon.readthedocs.io/
-- **Primary Scientific Reference for Virocon Models**: 
-  Haselsteiner, A.F., Sander, A., Ohlendorf, J.H., Thoben, K.D. (2020) 
-  Global hierarchical models for wind and wave contours: physical 
-  interpretations of the dependence functions. OMAE 2020.
-- **Primary Industry Guidance Reference**:
-  DNVGL-RP-C205 (2017). Environmental conditions and environmental loads.
+This is a practical engineering script, but it is based on a substantial body of probabilistic extreme-value and structural-reliability theory.
+
+---
+
+## 2. Why environmental contours matter
+
+In offshore and coastal engineering, one often needs a rational way to define **rare but plausible combinations** of environmental variables. A structure is usually not loaded by one variable in isolation. A vessel, jacket, monopile, floating unit, or breakwater experiences loads that depend on **combinations** of wave height, wave period, wind speed, current, and direction.
+
+A traditional univariate extreme-value analysis can estimate, for example, a 100-year wave height. But it does **not** directly answer questions such as:
+
+- What wave period tends to accompany very high waves?
+- Which combinations of height and period are likely to be critical for response?
+- How do those combinations depend on direction?
+- Which multivariate design states should be selected for time-domain or structural simulations?
+
+Environmental contours address this by converting a fitted **joint distribution** of environmental variables into a **curve of rare environmental states**. That curve can then be used as a screening surface for design load cases.
+
+The environmental contour method is widely used because it is much cheaper than a full long-term response analysis, while still being rooted in structural reliability concepts.
+
+---
+
+## 3. Theoretical framework
+
+### 3.1 Long-term extremes and return periods
+
+A return period is a statistical statement, not a schedule. A **50-year contour** does **not** mean the contour is exceeded exactly once every 50 years. It means the contour is associated with an exceedance probability that is consistent, on average, with one exceedance in 50 years under the adopted discretization into environmental states.
+
+If the environment is divided into sea states of duration `t_s`, and the target return period is `T_R` years, then the contour is linked to a small exceedance probability per sea state.
+
+The script uses the standard relationship:
+
+$$
+\alpha = \frac{t_s}{T_R \cdot 365.25 \cdot 24}
+$$
+
+where:
+
+- `\alpha` = exceedance probability per sea state
+- `t_s` = sea-state duration in hours
+- `T_R` = return period in years
+
+This is exactly the probability concept used by `virocon` through `calculate_alpha()`.
+
+### 3.2 Environmental states and exceedance probability
+
+The environmental contour method converts a **long-term** design target into a **per-state** exceedance probability. This is necessary because the metocean time series is treated as a sequence of environmental states, each assumed approximately stationary over a short duration.
+
+For example, if:
+
+- `t_s = 3 h`
+- `T_R = 50 years`
+
+then the total number of sea states in 50 years is approximately:
+
+$$
+N = \frac{50 \cdot 365.25 \cdot 24}{3}
+$$
+
+and the target exceedance probability per state is:
+
+$$
+\alpha = \frac{1}{N}
+$$
+
+The script lets `virocon` do this conversion consistently.
+
+### 3.3 Joint probabilistic modelling of sea states
+
+The central object in environmental contour analysis is the **joint probability distribution** of the environmental variables.
+
+For two variables, here `Hs` and `Tz`, the joint density may be written as:
+
+$$
+f_{Hs,Tz}(h,t) = f_{Hs}(h) \cdot f_{Tz|Hs}(t \mid h)
+$$
+
+This factorization is important:
+
+- `f_{Hs}(h)` describes the long-term distribution of wave height
+- `f_{Tz|Hs}(t \mid h)` describes how wave period behaves **conditional on wave height**
+
+This is more physically meaningful than assuming `Hs` and `Tz` are independent. In real sea states, wave period is typically dependent on wave height, and that dependence often matters strongly for dynamic response.
+
+### 3.4 Global hierarchical models
+
+`virocon` uses **global hierarchical models** as a central modelling approach.
+
+A global hierarchical model is called:
+
+- **global**, because it aims to describe the full range of the environmental variable rather than only a tail subset
+- **hierarchical**, because variables are arranged in an ordered dependence structure
+
+For a bivariate model:
+
+1. the first variable is modelled marginally
+2. the second variable is modelled conditionally on the first
+
+For higher dimensions, each variable can depend only on variables earlier in the hierarchy.
+
+This is one of the reasons the script first models wave height and then period conditional on wave height.
+
+### 3.5 The Hs-Tz model used in this script
+
+This script uses the predefined `virocon` joint model:
+
+```python
+get_OMAE2020_Hs_Tz()
+```
+
+That predefined model comes from the OMAE 2020 work on global hierarchical models for wind and wave contours. In broad terms, it represents:
+
+- `Hs` with an **Exponentiated Weibull** distribution
+- `Tz | Hs` with a **conditional Lognormal** distribution
+
+with the parameters of the conditional model controlled by **dependence functions** of `Hs`.
+
+This model choice is important because:
+
+- it is physically motivated
+- it is already encoded in the upstream library
+- it is documented in the `virocon` user guide
+- it avoids the user having to manually rebuild a complex joint model
+
+### 3.6 Why the script converts Tp to Tz
+
+A very common practical issue is that measured or hindcast wave data often provide **peak period** `Tp`, whereas many joint wave-height/period contour models are formulated in terms of **zero-upcrossing period** `Tz`.
+
+This script solves that mismatch by using a simple conversion:
+
+$$
+T_z = \frac{T_p}{R_{Tp/Tz}}
+$$
+
+where:
+
+- `R_{Tp/Tz}` is the configurable ratio `TP_TZ_RATIO`
+- default value in the script is `1.2`
+
+This conversion is an engineering approximation. It is convenient and commonly used, but it is still an approximation. Therefore:
+
+- the better your `Tp/Tz` conversion is for the local wave climate and spectral shape
+- the better the resulting contour model is likely to represent the true sea-state statistics
+
+### 3.7 Contour families and exceedance definitions
+
+Environmental contour methods differ in how they define the **exceedance region**. This is not a minor implementation detail. It is one of the main reasons why different contour methods can produce materially different design states.
+
+A useful high-level distinction is between methods based on:
+
+- **marginal exceedance** concepts
+- **total exceedance** concepts
+
+Another distinction is whether the contour is constructed in:
+
+- the **standard normal space**
+- the **original physical variable space**
+
+In the environmental contour benchmark literature, methods such as IFORM and direct sampling are usually grouped with **marginal exceedance** formulations, whereas ISORM and highest density are usually grouped with **total exceedance** formulations.
+
+This matters because different exceedance definitions can yield noticeably different contours, even when they are built on the **same fitted joint distribution**.
+
+### 3.8 IFORM, ISORM, highest density, and direct sampling
+
+The script exposes four contour classes through the `CONTOUR_METHOD_TYPE` setting:
+
+- `IFORM`
+- `ISORM`
+- `HighestDensity`
+- `DirectSampling`
+
+#### IFORM
+
+The **Inverse First-Order Reliability Method** is the default in the script. It is popular because it is standard, fast, and widely used in practice.
+
+Conceptually, IFORM:
+
+1. transforms the fitted joint distribution into a standard normal space
+2. defines a reliability surface associated with the target exceedance probability
+3. transforms that surface back to physical space
+
+IFORM is a strong practical default and is often used for preliminary and design-stage contour work.
+
+#### ISORM
+
+The **Inverse Second-Order Reliability Method** modifies the reliability approximation to better handle situations in which the first-order approximation may be non-conservative.
+
+In the literature, ISORM is frequently described as a more conservative alternative, especially for some concave failure geometries in transformed space.
+
+#### Highest Density
+
+A **highest density contour** encloses a region of probability mass such that the boundary corresponds to a constant joint density level.
+
+In simple terms, it is the boundary of the most probable region containing the required non-exceedance probability.
+
+This is conceptually different from IFORM and often yields different shapes, especially in asymmetric or strongly dependent distributions.
+
+#### Direct Sampling
+
+The **direct sampling contour** avoids some of the approximations associated with transformed reliability spaces and works more directly in physical space via sampling-based procedures.
+
+It can be attractive when one wants a contour construction method that stays closer to the original space and the model's own geometry.
+
+### 3.9 Model fitting, parameter estimation, and dependence functions
+
+A contour is only as credible as the fitted joint model beneath it.
+
+In `virocon`, a joint model is built from:
+
+- **distribution descriptions** (`dist_descriptions`)
+- **fit descriptions** (`fit_descriptions`)
+- **semantics** (`semantics`)
+
+The upstream documentation explains these as follows:
+
+- `dist_descriptions` define the joint model structure
+- `fit_descriptions` define how parameter estimation is performed
+- `semantics` define display metadata such as names, symbols, and units for plotting and labelling
+
+In the current `virocon` documentation, the default behaviour is:
+
+- **marginal distribution parameters** are estimated by **maximum likelihood estimation (MLE)**
+- **dependence function parameters** are estimated by **least squares**
+- weighted least squares can also be selected
+
+This architecture is important because it cleanly separates:
+
+1. **model structure definition**
+2. **parameter estimation**
+
+That separation is also one of the major architectural changes introduced in `virocon` 2.x.
+
+### 3.10 Why directional sector analysis is useful
+
+Many marine structures are strongly **direction-sensitive**.
+
+Examples:
+
+- a berth may be vulnerable to beam seas from only a narrow sector
+- a rubble mound breakwater may have one exposed trunk and one sheltered trunk
+- a vessel moored at a fixed heading may be much more sensitive to some approach sectors
+- a coastal site may experience different swell systems from west, southwest, and south
+
+For such problems, an omnidirectional contour is often too coarse. Directional analysis allows you to isolate the metocean statistics that matter for each approach sector.
+
+This script therefore supports sector-based analysis using `MWD`, with user-controlled:
+
+- sector width
+- sector starting direction
+- full circular coverage of `0–360°`
+- wrap-around sectors such as `340–10°`
+
+---
+
+## 4. What this script does
+
+At a high level, the script performs the following steps:
+
+1. reads a CSV file with wave data
+2. checks and cleans the data
+3. optionally generates a dummy `input.csv` if no file is found
+4. converts `Tp` to `Tz`
+5. loads the predefined OMAE 2020 `Hs-Tz` model from `virocon`
+6. fits the model to the data
+7. retries fitting using more robust settings if needed
+8. falls back to a simpler independent model if the complex fit fails
+9. computes contours for all requested return periods
+10. plots and exports the results
+11. optionally repeats the analysis for directional sectors
+12. writes a text report summarizing settings, fitted models, and contour maxima
+
+---
+
+## 5. Workflow implemented by the script
+
+The script follows the same broad workflow promoted by the `virocon` user guide:
+
+1. **Load environmental data**
+2. **Define or import a joint model**
+3. **Fit the model**
+4. **Choose return period and sea-state duration**
+5. **Compute contour**
+6. **Plot contour and inspect results**
+
+The script automates these steps in a reproducible engineering workflow and extends them with:
+
+- robust fit retries
+- sector analysis
+- configuration logging
+- PNG/PDF/report generation
+
+---
+
+## 6. Input data requirements
+
+The script expects a CSV file, by default:
+
+```text
+input.csv
+```
+
+### Required columns
+
+| Column | Meaning | Units | Required |
+|---|---|---:|---|
+| `datetime` | timestamp | date-time | yes |
+| `swh` | significant wave height `Hs` | m | yes |
+| `pp1d` | peak period `Tp` | s | yes |
+| `mwd` | mean wave direction | degrees | only if sector analysis is enabled |
+
+### Expected format
+
+- `datetime` should be parseable by `pandas`
+- `Hs` must be positive for valid modelling
+- `Tp` must be positive for valid modelling
+- `MWD` should normally be expressed in degrees in the `0–360` convention
+
+### Important note on direction convention
+
+The script assumes that the `MWD` column is already consistent with the engineering interpretation you want to analyse. In practical datasets, mean wave direction may be reported as:
+
+- **coming from** a direction
+- **going to** a direction
+
+The script does not transform conventions automatically. You must ensure the source convention matches your design interpretation.
+
+---
+
+## 7. Installation
+
+### Python environment
+
+The upstream `virocon` repository currently recommends Python:
+
+- `3.11`
+- `3.12`
+- `3.13`
+
+Older versions may work, but upstream states they are not actively tested.
+
+### Minimal installation for this script
+
+```bash
+pip install pandas numpy matplotlib virocon
+```
+
+### Recommended: create a clean virtual environment
+
+#### Windows
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install --upgrade pip
+pip install pandas numpy matplotlib virocon
+```
+
+#### Linux / macOS
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install pandas numpy matplotlib virocon
+```
+
+### Install virocon from PyPI
+
+```bash
+pip install virocon
+```
+
+### Install virocon from the upstream GitHub main branch
+
+```bash
+pip install https://github.com/virocon-organization/virocon/archive/main.zip
+```
+
+### Install virocon via conda-forge
+
+```bash
+conda create --name virocon python=3.13
+conda activate virocon
+conda install -c conda-forge virocon
+```
+
+---
+
+## 8. Detailed configuration guide
+
+The script exposes a user configuration block near the top of the file.
+
+### File and column settings
+
+```python
+INPUT_FILE = "input.csv"
+TIME_COL = "datetime"
+HS_CSV_COL_NAME = "swh"
+TP_CSV_COL_NAME = "pp1d"
+MWD_CSV_COL_NAME = "mwd"
+```
+
+These parameters define:
+
+- which CSV file is read
+- which column is interpreted as time
+- which columns contain `Hs`, `Tp`, and `MWD`
+
+### Tp-to-Tz conversion
+
+```python
+TP_TZ_RATIO = 1.2
+```
+
+Used as:
+
+```python
+Tz = Tp / TP_TZ_RATIO
+```
+
+### Sector analysis settings
+
+```python
+PERFORM_SECTOR_ANALYSIS = True
+SECTOR_WIDTH_DEGREES = 30
+START_DIR_DEGREES = 0
+```
+
+This part controls whether directional analysis is performed, the width of each sector, and the starting azimuth of the sectorization.
+
+Examples:
+
+- `SECTOR_WIDTH_DEGREES = 30`, `START_DIR_DEGREES = 0`  
+  sectors: `0-30`, `30-60`, `60-90`, ..., `330-0`
+
+- `SECTOR_WIDTH_DEGREES = 30`, `START_DIR_DEGREES = 10`  
+  sectors: `10-40`, `40-70`, `70-100`, ..., `340-10`
+
+The sector builder always covers the full 360° circle. If the width does not divide 360 exactly, the final sector is shortened so that there is no angular gap.
+
+### Contouring parameters
+
+```python
+SEA_STATE_DURATION_HOURS = 3.0
+RETURN_PERIODS_YEARS = [1, 5, 10, 25, 50, 100, 250]
+MIN_SAMPLES_FOR_FIT = 200
+```
+
+- `SEA_STATE_DURATION_HOURS` controls the environmental-state duration used in the exceedance probability
+- `RETURN_PERIODS_YEARS` is the list of contours to compute
+- `MIN_SAMPLES_FOR_FIT` prevents fitting a model to a statistically too-small sample or sector
+
+### Plotting and outputs
+
+```python
+SWAP_AXES_CONTOUR_PLOT = True
+CONTOUR_METHOD_TYPE = "IFORM"
+PDF_OUTPUT_FILE = "contours.pdf"
+PNG_OUTPUT_DIR = "plots"
+RESULTS_TXT_FILE = "results.txt"
+```
+
+- `SWAP_AXES_CONTOUR_PLOT = True` means period goes on the x-axis and `Hs` on the y-axis
+- `CONTOUR_METHOD_TYPE` selects the contour family
+- the remaining variables control output filenames and directories
+
+### Robust fitting strategies
+
+The script defines a list of progressive fitting strategies:
+
+1. default fitting
+2. perturbed initial guesses (`p0`)
+3. widened parameter bounds
+
+This is especially useful when sectors have:
+
+- small sample counts
+- unusual data ranges
+- highly clustered or narrow distributions
+- optimization difficulties
+
+---
+
+## 9. Step-by-step usage
+
+### Step 1 — Prepare the input CSV
+
+Create `input.csv` in the same directory as the script, unless you change `INPUT_FILE`.
+
+Example:
+
+```csv
+datetime,swh,pp1d,mwd
+2023-01-01 00:00:00,2.10,8.50,245
+2023-01-01 01:00:00,2.25,8.70,248
+2023-01-01 02:00:00,1.95,8.10,238
+2023-01-01 03:00:00,3.40,9.60,255
+```
+
+If `PERFORM_SECTOR_ANALYSIS = False`, the script only requires:
+
+- `datetime`
+- `swh`
+- `pp1d`
+
+### Step 2 — Adjust configuration
+
+Open the script and check:
+
+- file name and column names
+- `TP_TZ_RATIO`
+- sector settings
+- sea-state duration
+- return periods
+- contour method
+- output filenames
+
+### Step 3 — Run the script
+
+```bash
+python script.py
+```
+
+### Step 4 — Inspect console messages
+
+The script prints progress messages such as:
+
+- loading data
+- fitting attempt number
+- fitting strategy used
+- sector currently being analysed
+- PNG save status
+- report-writing status
+
+### Step 5 — Review generated outputs
+
+After a successful run, review:
+
+- `contours.pdf`
+- `plots/*.png`
+- `results.txt`
+
+### Step 6 — Check whether a fallback model was used
+
+Read `results.txt`. The report states whether the primary OMAE 2020 model fit succeeded or whether the script had to fall back to a simplified independent model.
+
+This is important for engineering interpretation.
+
+---
+
+## 10. Directional sector logic
+
+The script contains explicit helper functions to build and apply sectors.
+
+### Angle normalization
+
+All directions are normalized to the interval:
+
+```text
+[0, 360)
+```
+
+### Sector construction
+
+The sector builder creates sectors starting at:
+
+```text
+START_DIR_DEGREES % 360
+```
+
+then advances by `SECTOR_WIDTH_DEGREES` until the full circle is covered.
+
+### Interval convention
+
+The script uses the convention:
+
+- **lower bound inclusive**
+- **upper bound exclusive**
+
+So a sector `30-60` means:
+
+```text
+30° <= direction < 60°
+```
+
+### Wrap-around sectors
+
+Wrap-around sectors are handled correctly.
+
+Example:
+
+```text
+340-10
+```
+
+means:
+
+```text
+direction >= 340° OR direction < 10°
+```
+
+### Full-circle special case
+
+If:
+
+```python
+SECTOR_WIDTH_DEGREES = 360
+```
+
+the script generates one full-circle sector.
+
+### Why this matters
+
+This sector logic avoids common directional-analysis bugs such as:
+
+- missing the `350–0–10` interval
+- inconsistent wrap-around handling
+- leaving gaps when the width does not divide 360 exactly
+
+---
+
+## 11. Outputs generated by the script
+
+### 11.1 `contours.pdf`
+
+A multi-page PDF containing:
+
+- omnidirectional contour plots
+- one page per directional sector if sector analysis is enabled
+- all selected return periods overlaid
+- a small table summarizing the maximum `Hs` and corresponding periods
+
+### 11.2 `plots/`
+
+The script exports a high-resolution PNG for each analysis case:
+
+- omnidirectional
+- each directional sector
+
+These are useful for:
+
+- reports
+- slide decks
+- design notes
+- comparison between sectors
+
+### 11.3 `results.txt`
+
+This is the most important textual output. It includes:
+
+- an overall summary table
+- configuration values used in the run
+- number of loaded points
+- fitted model representation
+- fit-attempt history
+- contour summary table for each analysis case
+- warning and error notes if any sectors were skipped
+
+---
+
+## 12. Robustness strategy and fallback modelling
+
+Real metocean data are messy. Directional subsets can be sparse, tails can be difficult, and numerical optimization can fail.
+
+The script therefore includes three layers of robustness.
+
+### 12.1 Positive-value filtering
+
+After converting `Tp` to `Tz`, the script filters out data where:
+
+- `Hs <= 0`
+- `Tz <= 0`
+
+This is necessary because such values are physically invalid for the chosen distributions and can break log-based models.
+
+### 12.2 Multiple fitting attempts
+
+The script tries the full OMAE 2020 model using several strategies.
+
+#### Strategy A — default parameters
+
+The first fit attempt uses the standard upstream fitting description.
+
+#### Strategy B — perturbed initial guesses
+
+If the first attempt fails, the script perturbs initial values for dependence-function parameters. This can help the optimizer escape a poor starting region.
+
+#### Strategy C — wider bounds
+
+If necessary, the script expands parameter bounds. This widens the permissible search space and can help convergence in difficult sectors.
+
+### 12.3 Simplified fallback model
+
+If all full-model attempts fail, the script builds a simpler model in which:
+
+- `Hs` remains marginal
+- `Tz` is treated as marginal as well
+- the conditional dependence is removed
+
+This is statistically less rich, but it allows the workflow to complete and gives the user a usable contour instead of a total failure.
+
+### Engineering meaning of the fallback
+
+A fallback contour is **not equivalent** to a fully fitted dependent `Hs-Tz` model. It should be interpreted as a robustness measure, not as the preferred scientific result.
+
+When a fallback occurs, you should consider:
+
+- whether the sector has too few data
+- whether the period conversion is reasonable
+- whether the sector width should be changed
+- whether the dataset should be extended
+- whether a custom model would fit better than the predefined model
+
+---
+
+## 13. Interpretation of results
+
+### Maximum Hs along the contour
+
+The script reports the largest wave height found on each contour. This is often a useful first screening metric, but it is **not automatically the governing structural state**.
+
+A structure may instead be governed by:
+
+- a lower `Hs` paired with a longer period
+- a directional combination
+- a resonance-sensitive period range
+- a load component more sensitive to steepness than height alone
+
+### Tz and Tp at the point of maximum Hs
+
+The script reports both:
+
+- `Tz @ max Hs`
+- `Tp @ max Hs`
+
+This is useful because:
+
+- the fitted model is built in `Hs-Tz`
+- many engineering analyses are still easier to communicate and run in `Hs-Tp`
+
+### Omnidirectional versus sectoral contours
+
+Use the omnidirectional contour when you need a broad all-directions summary.
+
+Use sectoral contours when:
+
+- structure orientation matters
+- shielding or fetch effects matter
+- local exposure differs by heading
+- design checks are direction-specific
+
+### Comparing contour methods
+
+A contour from `IFORM` should not be expected to exactly match a contour from `HighestDensity` or `ISORM`, even when fitted to the same data.
+
+Differences can arise from:
+
+- different exceedance-region definitions
+- transformed-space versus physical-space construction
+- local sensitivity to tail fitting
+- dependence modelling choices
+
+---
+
+## 14. Engineering assumptions, limitations, and cautions
+
+This script is useful, but it does not remove engineering judgement.
+
+### 14.1 It is not a full long-term response analysis
+
+Environmental contours are approximate design tools. They do **not** fully account for the complete response distribution conditional on every environmental state.
+
+### 14.2 Tp-to-Tz conversion is approximate
+
+The script assumes a constant `Tp/Tz` ratio. In reality, the relationship depends on spectral shape and sea-state characteristics.
+
+### 14.3 Joint model choice matters
+
+Published benchmark work shows that differences in the **joint distribution model** can drive larger contour differences than the choice of contour-construction algorithm itself.
+
+### 14.4 Directional data convention matters
+
+Do not mix “coming from” and “going to” conventions without explicitly correcting the data.
+
+### 14.5 Minimum sample count is a practical threshold, not a theorem
+
+`MIN_SAMPLES_FOR_FIT = 200` is a pragmatic safeguard. It does not guarantee a good fit; it only helps avoid obviously under-informed fits.
+
+### 14.6 The contour is not the response envelope
+
+The response-governing state may lie at one point on the contour, but which point that is depends on the structural response model.
+
+### 14.7 Sector width is a modelling choice
+
+Narrow sectors improve directional resolution but reduce sample size. Wider sectors improve statistical stability but smear directional specificity.
+
+---
+
+## 15. Extending or adapting the script
+
+There are several natural extensions.
+
+### Add wind or current
+
+`virocon` supports higher-dimensional modelling. A future version of the script could extend from `Hs-Tz` to:
+
+- `V-Hs`
+- `V-Hs-Tz`
+- `Hs-Tz-U`
+- `V-Hs-Tz-current`
+
+provided the user defines or imports an appropriate joint model.
+
+### Replace the `Tp/Tz` conversion
+
+If your dataset or standards framework provides a more defensible transformation between `Tp` and `Tz`, replace the constant ratio.
+
+### Use custom joint models
+
+The `virocon` user guide includes detailed examples of how to define:
+
+- custom dependence functions
+- custom distributions
+- custom fitting descriptions
+- semantics dictionaries for plotting
+
+### Add goodness-of-fit diagnostics
+
+A future enhancement could export:
+
+- marginal quantile plots
+- dependence-function plots
+- sector-wise fit diagnostics
+- fit-quality metrics
+
+### Add extreme-point extraction rules
+
+Right now the script reports the point of maximum `Hs`. Some applications may also want:
+
+- maximum `Tp`
+- maximum steepness
+- percentile-based contour stations
+- equally spaced arc-length stations
+
+---
+
+## 16. Troubleshooting
+
+### `ModuleNotFoundError: No module named 'virocon'`
+
+Install dependencies:
+
+```bash
+pip install pandas numpy matplotlib virocon
+```
+
+### CSV columns not found
+
+Check the configuration block:
+
+```python
+TIME_COL
+HS_CSV_COL_NAME
+TP_CSV_COL_NAME
+MWD_CSV_COL_NAME
+```
+
+Make sure the CSV header exactly matches these names.
+
+### Sector analysis fails
+
+Check:
+
+- `MWD` column exists
+- directions are numeric
+- directions use a consistent convention
+- `SECTOR_WIDTH_DEGREES > 0`
+- `SECTOR_WIDTH_DEGREES <= 360`
+
+### Many sectors are skipped
+
+This usually means too few data fell into those sectors. Options:
+
+- widen sectors
+- reduce `MIN_SAMPLES_FOR_FIT`
+- increase record length
+- disable sector analysis
+
+### Fitting repeatedly fails
+
+Possible causes:
+
+- poor data quality
+- strong outliers
+- very sparse sectors
+- inappropriate `Tp/Tz` conversion
+- model mismatch
+
+Possible responses:
+
+- inspect the data
+- try wider sectors
+- test a different contour method
+- define a custom model in `virocon`
+- accept the fallback model only as a temporary diagnostic result
+
+### The dummy `input.csv` was created and the script exited
+
+This is expected. Populate the generated file with real data, then run the script again.
+
+---
+
+## 17. Upstream virocon context
+
+The script sits on top of `virocon`, so it is useful to understand what the upstream library provides.
+
+### What virocon is
+
+`virocon` is an importable Python package for computing environmental contours. The upstream repository describes it as a package intended to support the design of marine structures subjected to wave, wind, and current load combinations.
+
+### Methods implemented upstream
+
+The current upstream repository states that `virocon` implements:
+
+- joint probability modelling with a global hierarchical model
+- parameter estimation for that model
+- contour calculation using:
+  - IFORM
+  - ISORM
+  - direct sampling
+  - highest density
+- “AND” and “OR” exceedance contours
+
+### Architectural context
+
+The 2022 software update paper explains the major version-2 architecture:
+
+- defining model structure and fitting are separated
+- users can define dependence functions freely
+- a `predefined.py` module exposes ready-made joint models
+
+This architecture aligns very directly with how this script works:
+
+1. import predefined model
+2. instantiate `GlobalHierarchicalModel`
+3. fit it
+4. compute contours
+
+### User guide structure
+
+The upstream user guide contains sections on:
+
+- installation
+- quick start
+- overall workflow
+- useful contour definitions
+- detailed examples
+- predefined and custom joint models
+- parameter estimation
+- contour construction
+- the `dist_descriptions`, `fit_descriptions`, and `semantics` structures
+
+That guide is the best starting point for users who want to move from this script to more custom `virocon` workflows.
+
+---
+
+## 18. Detailed bibliography
+
+This section intentionally combines:
+
+1. **software and documentation resources**
+2. **technical and scientific references** relevant to environmental contour analysis
+
+### 18.1 Software, repository, and documentation resources
+
+1. **virocon-organization.** *virocon: A Python package to compute environmental contours.* GitHub repository.  
+   URL: https://github.com/virocon-organization/virocon  
+   Relevance: official upstream source code, installation notes, examples, implemented methods, licensing, and release history.
+
+2. **virocon documentation.** *User guide.*  
+   URL: https://virocon.readthedocs.io/en/latest/user_guide.html  
+   Relevance: official usage guide for the newest documented version, including installation, workflow, model structures, parameter estimation, and contour examples.
+
+3. **virocon documentation.** *Quick start example: Sea state contour.*  
+   URL: https://virocon.readthedocs.io/en/latest/example.html  
+   Relevance: concise worked example showing the standard workflow of loading data, importing `get_OMAE2020_Hs_Tz()`, fitting `GlobalHierarchicalModel`, computing `alpha`, building an `IFORMContour`, and plotting.
+
+4. **virocon documentation.** *Overall workflow and software architecture.*  
+   URL: https://virocon.readthedocs.io/en/latest/workflow.html  
+   Relevance: conceptual flowchart and class-level explanation of how model fitting and contour construction relate.
+
+5. **virocon documentation.** *Statistical distributions and parameter estimation.*  
+   URL: https://virocon.readthedocs.io/en/latest/joint_models_estimating_parameters.html  
+   Relevance: explains predefined joint models, custom models, and fitting defaults such as MLE for marginals and least squares or weighted least squares for dependence functions.
+
+6. **virocon documentation.** *Cheat sheet for the "description" data structures.*  
+   URL: https://virocon.readthedocs.io/en/latest/description_cheat_sheet.html  
+   Relevance: practical reference for `dist_descriptions`, `fit_descriptions`, and `semantics`.
+
+### 18.2 Core software papers on virocon
+
+7. **Haselsteiner, A.F., Lehmkuhl, J., Pape, T., Windmeier, K.-L., Thoben, K.-D. (2019).**  
+   *ViroCon: A software to compute multivariate extremes using the environmental contour method.*  
+   *SoftwareX*, 9, 95–101.  
+   DOI: https://doi.org/10.1016/j.softx.2019.01.003  
+   Relevance: original ViroCon software paper; explains motivation, implemented contour methods, and the original software architecture.
+
+8. **Haselsteiner, A.F., Windmeier, K.-L., Ströer, L., Thoben, K.-D. (2022).**  
+   *Update 2.0 to "ViroCon: A software to compute multivariate extremes using the environmental contour method".*  
+   *SoftwareX*, 20, 101243.  
+   DOI: https://doi.org/10.1016/j.softx.2022.101243  
+   Relevance: explains the major redesign in virocon 2.x, especially separation of model definition and fitting, user-definable dependence functions, and predefined model structures.
+
+9. **Windmeier, K.-L., Haselsteiner, A.F., Ströer, L., Thoben, K.-D. (2021).**  
+   *Using virocon to calculate environmental contours for offshore wind turbine design.*  
+   WESC 2021 presentation.  
+   Relevance: a compact practical presentation of the upstream workflow, especially for engineering users who want a task-oriented introduction.
+
+### 18.3 Environmental contour methodology, reviews, and benchmark studies
+
+10. **Haselsteiner, A.F., Coe, R.G., Manuel, L., Chai, W., Leira, B., Clarindo, G., Guedes Soares, C., Hannesdóttir, Á., Dimitrov, N., Sander, A., Ohlendorf, J.-H., Thoben, K.-D., de Hauteclocque, G., Mackay, E., Jonathan, P., Qiao, C., Myers, A., Rode, A., Hildebrandt, A., Schmidt, B., Vanem, E., Huseby, A.B. (2021).**  
+    *A benchmarking exercise for environmental contours.*  
+    Relevance: major comparison study showing that contour results depend both on the fitted joint distribution and on the contour-construction method; highly relevant for understanding uncertainty and method sensitivity.
+
+11. **Ross, E., Astrup, O.C., Bitner-Gregersen, E., Bunn, D., Feld, G., Gouldby, B., Huseby, A.B., Liu, Y., Randell, D., Vanem, E., Jonathan, P. (2019).**  
+    *A review of environmental contour methods for marine and coastal design.*  
+    Relevance: broad review paper on the field; useful for understanding the method family, conceptual foundations, and practical limitations.
+
+12. **Eckert, J., Martin, N., Coe, R., Seng, B.E., Stuart, J., Morrell, A. (2021).**  
+    *Comparison framework for environmental contours.*  
+    Relevance: supports systematic method comparison and evaluation.
+
+### 18.4 Foundational contour and reliability references
+
+13. **Haver, S. (1985).**  
+    Early work on environmental contour concepts and constant exceedance formulations.  
+    Relevance: foundational source in the historical development of the method.
+
+14. **Haver, S. (1987).**  
+    Further development of environmental contour concepts.  
+    Relevance: historical continuation of early contour methodology.
+
+15. **Winterstein, S.R., Ude, T.C., Cornell, C.A., Bjerager, P., Haver, S. (1993).**  
+    *Environmental parameters for extreme response: inverse FORM with omission factors.*  
+    Relevance: seminal IFORM reference and one of the most important papers in the practical environmental contour tradition.
+
+16. **Chai, W., Leira, B.J. (2018).**  
+    ISORM-based environmental contour formulation.  
+    Relevance: important reference for second-order reliability-based contour construction.
+
+17. **Huseby, A.B., Vanem, E., Natvig, B. (2013).**  
+    Direct sampling contour method.  
+    Relevance: key reference for sampling-based contour construction in physical space.
+
+18. **Haselsteiner, A.F., Ohlendorf, J.-H., Wosniok, W., Thoben, K.-D. (2017).**  
+    Highest density contour method.  
+    Relevance: important reference for density-level-set contours with total exceedance interpretation.
+
+19. **Dimitrov, N. (2020).**  
+    Inverse directional simulation contours.  
+    Relevance: reference for directional simulation contour methodology and its relation to ISORM.
+
+20. **Derbanne, Q., de Hauteclocque, G. (2019).**  
+    Direct IFORM.  
+    Relevance: connects reliability ideas with more direct construction in physical space.
+
+### 18.5 Joint distribution modelling and dependence structure references
+
+21. **Mathisen, M., Bitner-Gregersen, E. (1990).**  
+    Early hierarchical or conditional metocean modelling ideas.  
+    Relevance: historical background for conditional wave-variable modelling.
+
+22. **Bitner-Gregersen, E. (2015).**  
+    Advanced joint wave and wind distribution modelling.  
+    Relevance: important practical and theoretical reference for offshore environmental modelling.
+
+23. **Horn, J.T., Bitner-Gregersen, E., Krokstad, J.R., Leira, B.J., Amdahl, J. (2018).**  
+    Global hierarchical-type modelling approaches for metocean variables.  
+    Relevance: useful background for model-structure design.
+
+24. **Cheng, W., Svangstu, E., Moan, T., Gao, Z. (2019).**  
+    Further developments in joint metocean modelling for contour work.  
+    Relevance: modern comparison point for hierarchical modelling strategies.
+
+25. **Haselsteiner, A.F., Sander, A., Ohlendorf, J.-H., Thoben, K.-D. (2020).**  
+    *Global hierarchical models for wind and wave contours: physical interpretations of the dependence functions.*  
+    Proceedings of OMAE 2020.  
+    DOI: http://dx.doi.org/10.1115/OMAE2020-18668  
+    Relevance: central model reference for the predefined OMAE2020 models used by `virocon`, including the `Hs-Tz` model used by this script.
+
+26. **Haselsteiner, A.F., Thoben, K.-D. (2020).**  
+    On fitting the exponentiated Weibull distribution to significant wave height data with emphasis on the upper tail.  
+    Relevance: explains why exponentiated Weibull can be attractive for `Hs` modelling and how tail-focused estimation may improve engineering usefulness.
+
+### 18.6 Alternative multivariate extreme-model families
+
+27. **Vanem, E. (2016).**  
+    Copula-based multivariate metocean modelling.  
+    Relevance: alternative to hierarchical models.
+
+28. **Fazeres-Ferradosa, T., Taveira-Pinto, F., Vanem, E., Reis, M.T., das Neves, L. (2018).**  
+    Copula approaches in marine and coastal extreme analysis.  
+    Relevance: useful for comparing modelling philosophies.
+
+29. **Manuel, L., Nguyen, P.T.T., Canning, J., Coe, R., Eckert-Gallup, A., Martin, N. (2018).**  
+    Joint extreme modelling alternatives for offshore applications.  
+    Relevance: comparison with non-hierarchical models.
+
+30. **Jonathan, P., Flynn, J., Ewans, K. (2010).**  
+    Conditional extremes models for metocean variables.  
+    Relevance: important alternative tail-modelling strategy.
+
+31. **Jonathan, P., Ewans, K., Flynn, J. (2014).**  
+    Joint exceedance and conditional extreme contour-related approaches.  
+    Relevance: relevant for tail-focused design state estimation.
+
+### 18.7 Guidance and standards
+
+32. **DNV GL (2017).**  
+    *DNVGL-RP-C205: Environmental conditions and environmental loads.*  
+    Relevance: one of the most influential offshore engineering guidance documents for environmental loading and joint environmental models.
+
+33. **NORSOK (2007).**  
+    *N-003: Actions and action effects.*  
+    Relevance: guidance on design loading context, including practical safety handling.
+
+34. **International Electrotechnical Commission (2019).**  
+    *IEC 61400-3-1: Design requirements for fixed offshore wind turbines.*  
+    Relevance: important standard in offshore wind design where environmental contours are commonly used.
+
+### 18.8 Response-based and full long-term analysis context
+
+35. **Guedes Soares, C. (1993).**  
+    Full long-term response analysis concepts.  
+    Relevance: foundational reference for the more complete alternative to contour-based screening.
+
+36. **Muliawan, M.J., Gao, Z., Moan, T. (2013).**  
+    Response estimation through full long-term approaches.  
+    Relevance: useful contrast against environmental contour approximations.
+
+37. **Vanem, E., Guo, B., Ross, E., Jonathan, P. (2020).**  
+    Response-based long-term analysis in offshore reliability.  
+    Relevance: important reminder that contour methods are approximations, not substitutes in all contexts.
+
+---
